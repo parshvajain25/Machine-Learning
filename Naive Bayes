@@ -1,0 +1,43 @@
+'''Naive Bayes'''
+
+# Using normal scikit learn
+      from sklearn import datasets
+      from sklearn import metrics
+      from sklearn.naive_bayes import GaussianNB
+
+      dataset = datasets.load_iris()
+
+      # Creating our naive bayes model using Sklearn
+      model = GaussianNB()
+      model.fit(dataset.data, dataset.target)
+
+      # Making Predictions
+      expected = dataset.target
+      predicted = model.predict(dataset.data)
+
+      # getting accuracy and precision
+      print(metrics.classification_report(expected, predicted))
+      print(metrics.confusion_matrix(expected, predicted))
+      print(metrics.accuracy_score(expected, predicted))
+
+# Using Hyper Parameters
+      from sklearn.datasets import load_iris
+      from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_split
+      from sklearn.naive_bayes import GaussianNB
+      from sklearn.metrics import accuracy_score, make_scorer
+
+      skf = StratifiedKFold(n_splits=10)
+      params = {}
+      nb = GaussianNB()
+      gs = GridSearchCV(nb, cv=skf, param_grid=params, return_train_score=True)
+
+      data = load_iris()
+      X_train, X_test, y_train, y_test = train_test_split(data.data, data.target)
+
+      grid_fit = gs.fit(X_train, y_train)
+      best_clf = grid_fit.best_estimator_
+      y_test_pred1 = best_clf.predict(X_test)
+      test_accuracy1 = accuracy_score(y_test, y_test_pred1)
+      print(test_accuracy1)
+
+# You can calculate both training accuracy and test accuracy to check your model's fitting
