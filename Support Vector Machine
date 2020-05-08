@@ -1,0 +1,63 @@
+''' Support Vector Machine(SVM)'''
+
+# Using normal scikit learn
+      from sklearn import datasets
+
+      cancer = datasets.load_breast_cancer()
+
+      # Split dataset into training set and test set
+      from sklearn.model_selection import train_test_split
+      X_train, X_test, y_train, y_test = train_test_split(cancer.data, cancer.target, test_size=0.3,random_state=109) # 70% training and 30% test
+
+      #Import svm model
+      from sklearn import svm
+
+      #Create a svm Classifier
+      clf = svm.SVC(kernel='linear') # Linear Kernel
+
+      #Train the model using the training sets
+      clf.fit(X_train, y_train)
+
+      #Predict the response for test dataset
+      y_pred = clf.predict(X_test)
+
+      #Import scikit-learn metrics module for accuracy calculation
+      from sklearn import metrics
+
+      # Model Accuracy: how often is the classifier correct?
+      print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+      # Model Precision: what percentage of positive tuples are labeled as such?
+      print("Precision:",metrics.precision_score(y_test, y_pred))
+
+      # Model Recall: what percentage of positive tuples are labelled as such?
+      print("Recall:",metrics.recall_score(y_test, y_pred))
+
+# Using Hyper Parameters
+      from sklearn import datasets  
+      from sklearn.svm import SVC
+      from sklearn.model_selection import GridSearchCV 
+      from sklearn.metrics import accuracy_score
+
+      cancer = datasets.load_breast_cancer()
+
+      from sklearn.model_selection import train_test_split
+      X_train, X_test, y_train, y_test = train_test_split(cancer.data, cancer.target, test_size=0.3,random_state=109) # 70% training and 30% test
+
+      # defining parameter range 
+      param_grid = {'C': [0.1, 1, 10, 100, 1000],  
+                    'gamma': [1, 0.1, 0.01, 0.001, 0.0001], 
+                    'kernel': ['rbf']}  
+
+      grid = GridSearchCV(SVC(), param_grid, refit = True, verbose = 3) 
+
+      # fitting the model for grid search  
+      grid_fit = grid.fit(X_train, y_train)
+      best_clf = grid_fit.best_estimator_
+      y_train_pred1 = best_clf.predict(X_train)
+      y_test_pred1 = best_clf.predict(X_test)
+      train_accuracy1 = accuracy_score(y_train, y_train_pred1)
+      test_accuracy1 = accuracy_score(y_test, y_test_pred1)
+      print(train_accuracy1)
+      print(test_accuracy1)
+
