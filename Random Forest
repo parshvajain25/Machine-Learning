@@ -1,7 +1,6 @@
 ''' Random Forest'''
 
 # Using normal scikit learn
-      import numpy as np
       import matplotlib.pyplot as plt
       import pandas as pd
 
@@ -34,16 +33,13 @@
       print('The test accuracy is', test_accuracy)
       
 # Using Hyper-Parameters
-      import numpy as np
       import matplotlib.pyplot as plt
       import pandas as pd
 
-      # Importing the dataset
       dataset = pd.read_excel('Titanic_1.xlsx')
       X = dataset.iloc[:, 1:8].values
       y = dataset.iloc[:, 0].values
       
-      # Splitting the dataset into the Training set and Test set
       from sklearn.model_selection import train_test_split
       X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
