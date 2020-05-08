@@ -1,0 +1,32 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import numpy as np
+sns.set()
+plt.rcParams['figure.figsize'] = (16,9)
+plt.style.use('ggplot')
+
+# Importing the dataset
+data = pd.read_csv('D:\Parshva\Machine Learning\K-Means\movie_metadata.csv')
+data.dropna(inplace = True)
+
+newdata = data.iloc[:,4:6]
+
+# Using Kmeans from sklearn
+
+from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters = 10)
+kmeans.fit(newdata)
+kmeans.cluster_centers_
+
+#print(kmeans.labels_)
+
+unique, counts = np.unique(kmeans.labels_, return_counts = True)
+print(dict(zip(unique, counts)))
+
+# Plot the data
+newdata['cluster'] = kmeans.labels_
+sns.set_style('whitegrid')
+sns.lmplot('director_facebook_likes','actor_3_facebook_likes',data = newdata, hue = 'cluster',
+           palette = 'coolwarm', height = 6, aspect = 1, fit_reg = False)
