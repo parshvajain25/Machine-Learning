@@ -39,16 +39,12 @@
       scorer = make_scorer(accuracy_score)
       grid = GridSearchCV(estimator = clf, param_grid = parameters, scoring = scorer)
 
-
-      # Train the model
       grid_fit = grid.fit(X_train, y_train)
       best_clf = grid_fit.best_estimator_
 
-      # Make predictions
       y_train_pred = best_clf.predict(X_train)
       y_test_pred = best_clf.predict(X_test)
 
-      # Calculate the accuracy
       train_accuracy = accuracy_score(y_train, y_train_pred)
       test_accuracy = accuracy_score(y_test, y_test_pred)
       print('The training accuracy is', train_accuracy)
