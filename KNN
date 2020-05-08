@@ -99,7 +99,6 @@
       # Converting string labels into numbers.
       weather_encoded=le.fit_transform(weather)
       x1_encoded = le.fit_transform(x1_test)
-
       temp_encoded=le.fit_transform(temp)
       x2_encoded = le.fit_transform(x2_test)
 
@@ -110,13 +109,8 @@
       test = list(zip(x1_encoded,x2_encoded))
 
       from sklearn.neighbors import KNeighborsClassifier
-
       model = KNeighborsClassifier(n_neighbors=3)
-
-      # Train the model using the training sets
       model.fit(features,label)
-
-      #Predict Output
       predicted= model.predict(test) 
 
       print(predicted,y)
