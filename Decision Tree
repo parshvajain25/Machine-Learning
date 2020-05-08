@@ -6,7 +6,7 @@
       import numpy as np
       from sklearn.tree import DecisionTreeClassifier
 
-      #Define the classifier, and fit it to the data
+      # Define the classifier, and fit it to the data
       model = pd.read_excel('Position_Salaries.xlsx') 
 
       X = model.iloc[:, 1:2].values
@@ -43,7 +43,6 @@
       # Train the model
       grid_fit = grid.fit(X_train, y_train)
       best_clf = grid_fit.best_estimator_
-      print(best_clf)
 
       # Make predictions
       y_train_pred = best_clf.predict(X_train)
