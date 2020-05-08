@@ -1,0 +1,50 @@
+''' Logistic Regression  '''
+
+      import pandas as pd
+      import numpy as np
+      import seaborn as sns
+      import matplotlib.pyplot as plt
+      import math
+
+      # Read the file
+      titanic_data = pd.read_excel("Titanic.xlsx")
+
+      # Data Wrangling
+
+      titanic_data.drop("Cabin",axis=1,inplace=True)
+      titanic_data.dropna(inplace=True)
+      sex = pd.get_dummies(titanic_data['Sex'], drop_first = True)
+      embark = pd.get_dummies(titanic_data['Embarked'], drop_first = True)
+      Pcl = pd.get_dummies(titanic_data['Pclass'], drop_first = True)
+      titanic_data = pd.concat([titanic_data, sex, embark, Pcl], axis = 1)
+      titanic_data.drop(['Sex', 'Pclass', 'Embarked', 'Name', 'PassengerId','Ticket'], axis=1, inplace=True)
+
+      # Train Data
+
+      x = titanic_data.drop("Survived",axis=1)
+      y = titanic_data["Survived"]
+
+      import sklearn
+      from sklearn.model_selection import train_test_split
+
+      x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state = 1)
+      from sklearn.linear_model import LogisticRegression
+      logmodel = LogisticRegression()
+      logmodel.fit(x_train, y_train)
+      prediction = logmodel.predict(x_test)
+
+      from sklearn.metrics import classification_report
+
+      from sklearn.metrics import confusion_matrix
+      confusion_matrix(y_test,prediction)
+
+      from sklearn.metrics import accuracy_score
+
+      accuracy_score(y_test, prediction)
+
+      d={'y_test': y_test, 'Predictions':prediction}
+
+      data = d
+      df = pd.DataFrame(data = d)
+      df
+      print(df)
