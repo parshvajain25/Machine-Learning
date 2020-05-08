@@ -1,0 +1,122 @@
+'''KNN'''
+
+# Just grab the code logic and use your own files for running in your system
+
+# From scratch
+      import csv
+      import random
+      def loadDataset(filename,split,trainingSet=[] , testSet=[]):
+          with open(filename , 'r') as csvfile:
+              lis = [line.split() for line in csvfile] # to convert file into list of rows
+              for x in range(len(lis)-1):
+                  for y in range(4):
+                      lis[x][y] = float(lis[x][y])
+                  if random.random() < split:
+                      trainingSet.append(lis[x])
+                  else:
+                      testSet.append(lis[x])             
+
+      import math
+      def euclideanDistance(instance1, instance2, length):
+          dist = 0
+          for x in range(length):
+              dist += pow((instance1[x] - instance2[x]),2)
+          return math.sqrt(dist)
+
+      import operator
+      def getNeighbors(trainingSet, testInstance, k):
+          distances = []
+          length = len(testInstance)-1
+          for x in range(len(trainingSet)):
+              dist = euclideanDistance(testInstance, trainingSet[x], length)
+              distances.append((trainingSet[x][-1],dist))
+          distances.sort(key = operator.itemgetter(1))
+          neighbors = []
+          for x in range(k):
+              neighbors.append(distances[x][0])
+          return neighbors
+
+      def getResponse(neighbors):
+          classvotes = {}
+          for x in range(len(neighbors)):
+              response = neighbors[x]
+              if response in classvotes:
+                  classvotes[response] +=1
+              else:
+                  classvotes[response] = 1
+          big = 0
+          sortedVotes = ""
+          for i in classvotes:
+              if classvotes[i]>big:
+                  sortedVotes = i
+          return sortedVotes
+
+      def getAccuracy(testSet,pred):
+          correct = 0
+          for x in range(len(testSet)):
+              if testSet[x][-1] == pred[x]:
+                  correct +=1
+          return (correct/float(len(testSet)))*100.00
+
+      def main():
+          # Prepare Data
+          trainingSet = []
+          testSet = []
+          split = 0.67
+          loadDataset(r'D:\Parshva\Machine Learning\KNN\Iris.txt', split, trainingSet, testSet)
+          print('Train: ' + repr(len(trainingSet)))
+          print('Test' + repr(len(testSet)))
+          # Generate Predictions
+          pred = []
+          k = 3
+          for x in range(len(testSet)):
+              neighbors = getNeighbors(trainingSet, testSet[x],k)
+              result = getResponse(neighbors)
+              pred.append(result)
+              print(x+1,'Predicted =', repr(result), ', Actual =', repr(testSet[x][-1]))
+          accuracy = getAccuracy(testSet,pred)
+          print('Accuracy = '+ repr(accuracy) + '%')
+
+      main()
+
+# Using scikit learn
+      # Assigning features and label variables
+      # First Feature
+      weather=['Sunny','Sunny','Overcast','Rainy','Rainy','Rainy','Overcast','Sunny','Sunny']
+      x1_test = ['Rainy','Sunny','Overcast','Overcast','Rainy']
+      # Second Feature
+      temp=['Hot','Hot','Hot','Mild','Cool','Cool','Cool','Mild','Cool']
+      x2_test = ['Mild','Mild','Mild','Hot','Mild']
+
+      # Label or target varible
+      play=['No','No','Yes','Yes','Yes','No','Yes','No','Yes']
+      y_test = ['Yes','Yes','Yes','Yes','No']
+
+      # Import LabelEncoder : It converts strings into numbers so that the Machine Learning model can learn.
+      from sklearn import preprocessing
+      #creating labelEncoder
+      le = preprocessing.LabelEncoder()
+      # Converting string labels into numbers.
+      weather_encoded=le.fit_transform(weather)
+      x1_encoded = le.fit_transform(x1_test)
+
+      temp_encoded=le.fit_transform(temp)
+      x2_encoded = le.fit_transform(x2_test)
+
+      label=le.fit_transform(play)
+      y = le.fit_transform(y_test)
+
+      features=list(zip(weather_encoded,temp_encoded))
+      test = list(zip(x1_encoded,x2_encoded))
+
+      from sklearn.neighbors import KNeighborsClassifier
+
+      model = KNeighborsClassifier(n_neighbors=3)
+
+      # Train the model using the training sets
+      model.fit(features,label)
+
+      #Predict Output
+      predicted= model.predict(test) 
+
+      print(predicted,y)
