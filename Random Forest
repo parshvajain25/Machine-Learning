@@ -1,0 +1,70 @@
+''' Random Forest'''
+
+# Using normal scikit learn
+      import numpy as np
+      import matplotlib.pyplot as plt
+      import pandas as pd
+
+      # Importing the dataset
+      dataset = pd.read_excel('Titanic_1.xlsx') # Cleaned file made in the Logistic Regression Problem
+      X = dataset.iloc[:, 1:8].values
+      y = dataset.iloc[:, 0].values
+
+      # Splitting the dataset into the Training set and Test set
+      from sklearn.model_selection import train_test_split
+      X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+      from sklearn.ensemble import RandomForestClassifier
+
+      # Create the model with 100 trees
+      model = RandomForestClassifier(n_estimators=100, 
+                                     random_state=50, 
+                                     max_features = 'sqrt',
+                                     n_jobs=-1, verbose = 1)
+
+      # Fit on training data
+      model.fit(X_train, y_train)
+
+      # Predictions
+      y_pred = model.predict(X_test)
+
+      # Calculate Accuracy
+      from sklearn.metrics import accuracy_score
+      test_accuracy = accuracy_score(y_test, y_pred)
+      print('The test accuracy is', test_accuracy)
+      
+# Using Hyper-Parameters
+      import numpy as np
+      import matplotlib.pyplot as plt
+      import pandas as pd
+
+      # Importing the dataset
+      dataset = pd.read_excel('Titanic_1.xlsx')
+      X = dataset.iloc[:, 1:8].values
+      y = dataset.iloc[:, 0].values
+      
+      # Splitting the dataset into the Training set and Test set
+      from sklearn.model_selection import train_test_split
+      X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+      from sklearn.ensemble import RandomForestClassifier
+      from sklearn.metrics import accuracy_score, make_scorer
+      from sklearn.model_selection import GridSearchCV
+      
+      clf = RandomForestClassifier(random_state = 23)
+      parameters = {'max_depth': np.arange(3, 21), 'min_samples_leaf': np.arange(2, 11), 'min_samples_split': np.arange(4, 11)}
+      scorer = make_scorer(accuracy_score)
+      grid = GridSearchCV(estimator = clf, param_grid = parameters, scoring = scorer)
+      grid_fit = grid.fit(X_train, y_train)
+      best_clf = grid_fit.best_estimator_
+      y_test_pred1 = best_clf.predict(X_test)
+      test_accuracy1 = accuracy_score(y_test, y_test_pred1)
+      print(test_accuracy1)
+
+# RandomForestRegressor can be used for regression problems
+''' Hyperparameters directly control the behaviour of the training algorithm 
+    and have a significant impact on the performance of the model is being trained.
+'''
+
+
+
